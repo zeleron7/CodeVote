@@ -1,8 +1,13 @@
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using CodeVote.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<CodeVoteContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CodeVoteContext") ?? throw new InvalidOperationException("Connection string 'CodeVoteContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
