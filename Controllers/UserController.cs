@@ -25,14 +25,14 @@ namespace CodeVote.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDbM>>> GetUserDbM()
         {
-            return await _context.UserDbM.ToListAsync();
+            return await _context.Users.ToListAsync();
         }
 
         // GET: api/User/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDbM>> GetUserDbM(Guid id)
         {
-            var userDbM = await _context.UserDbM.FindAsync(id);
+            var userDbM = await _context.Users.FindAsync(id);
 
             if (userDbM == null)
             {
@@ -78,7 +78,7 @@ namespace CodeVote.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDbM>> PostUserDbM(UserDbM userDbM)
         {
-            _context.UserDbM.Add(userDbM);
+            _context.Users.Add(userDbM);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUserDbM", new { id = userDbM.UserId }, userDbM);
@@ -88,13 +88,13 @@ namespace CodeVote.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserDbM(Guid id)
         {
-            var userDbM = await _context.UserDbM.FindAsync(id);
+            var userDbM = await _context.Users.FindAsync(id);
             if (userDbM == null)
             {
                 return NotFound();
             }
 
-            _context.UserDbM.Remove(userDbM);
+            _context.Users.Remove(userDbM);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -102,7 +102,7 @@ namespace CodeVote.Controllers
 
         private bool UserDbMExists(Guid id)
         {
-            return _context.UserDbM.Any(e => e.UserId == id);
+            return _context.Users.Any(e => e.UserId == id);
         }
     }
 }

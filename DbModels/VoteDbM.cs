@@ -1,18 +1,29 @@
 ﻿using CodeVote.Interfaces;
+using CodeVote.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CodeVote.DbModels
 {
-    public class VoteDbM
+    public class VoteDbM : Vote
     {
         [Key]
-        public virtual Guid VoteId { get; set; }
-        public virtual int UserId { get; set; }
-        public virtual int ProjectIdeaId { get; set; }
-        public virtual IUser User { get; set; }
+        public override Guid VoteId { get; set; }
+        public override int UserId { get; set; }
+        public override int ProjectIdeaId { get; set; }
+
 
         [NotMapped]
-        public virtual IProjectIdea ProjectIdea { get; set; }
+        public override IUser User { get => UserDbM; set => throw new NotImplementedException(); }
+
+        [NotMapped]
+        public override IProjectIdea ProjectIdea { get => ProjectIdeaDbM; set => throw new NotImplementedException(); }
+
+        [JsonIgnore]
+        public virtual ProjectIdeaDbM ProjectIdeaDbM { get; set; } = null;
+
+        [JsonIgnore]
+        public virtual UserDbM UserDbM { get; set; } = null;
     }
 }

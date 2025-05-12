@@ -14,6 +14,8 @@ namespace CodeVote.Data
         {
         }
 
-        public DbSet<CodeVote.DbModels.UserDbM> UserDbM { get; set; } = default!;
+        public DbSet<ProjectIdeaDbM> ProjectIdeas { get; set; }
+        public DbSet<UserDbM> Users { get; set; }
+        public DbSet<VoteDbM> Votes { get; set; }
     }
 }

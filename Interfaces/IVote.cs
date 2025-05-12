@@ -1,5 +1,8 @@
-﻿namespace CodeVote.Interfaces
+﻿
+namespace CodeVote.Interfaces
+
 {
+    
     public interface IVote
     {
         public Guid VoteId { get; set; }

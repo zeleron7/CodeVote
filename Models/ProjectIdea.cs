@@ -11,7 +11,7 @@ namespace CodeVote.Models
         public virtual string Title { get; set; }
         public virtual string Description { get; set; }
         public virtual int VoteCount { get; set; }
-        public virtual List<IVote> Votes { get; set; }
+        public virtual List<IVote> Votes { get; set; } = null;
 
     }
 }

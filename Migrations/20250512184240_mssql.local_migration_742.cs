@@ -1,0 +1,95 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace CodeVote.Migrations
+{
+    /// <inheritdoc />
+    public partial class mssqllocal_migration_742 : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "ProjectIdeas",
+                columns: table => new
+                {
+                    ProjectIdeaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VoteCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectIdeas", x => x.ProjectIdeaId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Votes",
+                columns: table => new
+                {
+                    VoteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ProjectIdeaId = table.Column<int>(type: "int", nullable: false),
+                    ProjectIdeaDbMProjectIdeaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserDbMUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Votes", x => x.VoteId);
+                    table.ForeignKey(
+                        name: "FK_Votes_ProjectIdeas_ProjectIdeaDbMProjectIdeaId",
+                        column: x => x.ProjectIdeaDbMProjectIdeaId,
+                        principalTable: "ProjectIdeas",
+                        principalColumn: "ProjectIdeaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Votes_Users_UserDbMUserId",
+                        column: x => x.UserDbMUserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votes_ProjectIdeaDbMProjectIdeaId",
+                table: "Votes",
+                column: "ProjectIdeaDbMProjectIdeaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votes_UserDbMUserId",
+                table: "Votes",
+                column: "UserDbMUserId");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "Votes");
+
+            migrationBuilder.DropTable(
+                name: "ProjectIdeas");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+        }
+    }
+}

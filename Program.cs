@@ -7,7 +7,9 @@ using CodeVote.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CodeVoteContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CodeVoteContext") ?? throw new InvalidOperationException("Connection string 'CodeVoteContext' not found.")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("CodeVoteContext")
+            ?? throw new InvalidOperationException("Connection string 'CodeVoteContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
