@@ -4,6 +4,7 @@ using Microsoft.Identity.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using CodeVote.Data;
+using CodeVote.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CodeVoteContext>(options =>
@@ -19,6 +20,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+//
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProjectIdeaService, ProjectIdeaService>();
 
 var app = builder.Build();
 

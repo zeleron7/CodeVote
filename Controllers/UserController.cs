@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CodeVote.Data;
 using CodeVote.DbModels;
+using CodeVote.Services;
+using CodeVote.Models.DTO;
 
 namespace CodeVote.Controllers
 {
@@ -15,87 +17,48 @@ namespace CodeVote.Controllers
     public class UserController : ControllerBase
     {
         private readonly CodeVoteContext _context;
+        private readonly IUserService _userService;
 
-        public UserController(CodeVoteContext context)
+        public UserController(CodeVoteContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         // GET: api/User
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDbM>>> GetUserDbM()
+        public async Task<ActionResult<List<ReadUserDTO>>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
         }
 
-        // GET: api/User/5
+        // GET: api/User
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDbM>> GetUserDbM(Guid id)
+        public async Task<ActionResult<List<ReadUserDTO>>> GetOneUser(Guid id)
         {
-            var userDbM = await _context.Users.FindAsync(id);
-
-            if (userDbM == null)
-            {
-                return NotFound();
-            }
-
-            return userDbM;
+            var user = await _userService.GetUserByIdAsync(id);
+            return Ok(user);
         }
 
-        // PUT: api/User/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUserDbM(Guid id, UserDbM userDbM)
-        {
-            if (id != userDbM.UserId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(userDbM).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserDbMExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<UserDbM>> PostUserDbM(UserDbM userDbM)
+        public async Task<ActionResult<ReadUserDTO>> CreateUser(CreateUserDTO createUserDto)
         {
-            _context.Users.Add(userDbM);
-            await _context.SaveChangesAsync();
+            var createdUser = await _userService.CreateUserAsync(createUserDto);
 
-            return CreatedAtAction("GetUserDbM", new { id = userDbM.UserId }, userDbM);
+            return createdUser;
         }
 
-        // DELETE: api/User/5
+        //DELETE: api/User
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUserDbM(Guid id)
+        public async Task<IActionResult> DeleteUser(Guid id)
         {
-            var userDbM = await _context.Users.FindAsync(id);
-            if (userDbM == null)
-            {
+            var success = await _userService.DeleteUserAsync(id);
+            if (!success)
                 return NotFound();
-            }
-
-            _context.Users.Remove(userDbM);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
