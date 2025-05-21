@@ -81,23 +81,17 @@ namespace CodeVote.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProjectIdeaDbMProjectIdeaId")
+                    b.Property<Guid>("ProjectIdeaId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ProjectIdeaId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserDbMUserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.HasKey("VoteId");
 
-                    b.HasIndex("ProjectIdeaDbMProjectIdeaId");
+                    b.HasIndex("ProjectIdeaId");
 
-                    b.HasIndex("UserDbMUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Votes");
                 });
@@ -106,13 +100,13 @@ namespace CodeVote.Migrations
                 {
                     b.HasOne("CodeVote.DbModels.ProjectIdeaDbM", "ProjectIdeaDbM")
                         .WithMany("VoteDbM")
-                        .HasForeignKey("ProjectIdeaDbMProjectIdeaId")
+                        .HasForeignKey("ProjectIdeaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CodeVote.DbModels.UserDbM", "UserDbM")
                         .WithMany("VoteDbM")
-                        .HasForeignKey("UserDbMUserId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

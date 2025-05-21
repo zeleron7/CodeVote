@@ -8,8 +8,8 @@ namespace CodeVote.Models
     {
         [Key]
         public virtual Guid VoteId { get; set; }
-        public virtual int UserId { get; set; }
-        public virtual int ProjectIdeaId { get; set; }
+        public virtual Guid UserId { get; set; }
+        public virtual Guid ProjectIdeaId { get; set; }
         public virtual IUser User { get; set; }
         public virtual IProjectIdea ProjectIdea { get; set; }
     }

@@ -41,6 +41,17 @@ namespace CodeVote.Controllers
             return Ok(user);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(Guid id, UpdateUserDTO updateUserDto)
+        {
+            var updatedUser = await _userService.UpdateUserAsync(id, updateUserDto);
+            if (updatedUser == null)
+                return NotFound();
+
+            return Ok(updatedUser);
+        }
+
+
 
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

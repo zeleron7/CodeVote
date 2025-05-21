@@ -28,6 +28,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectIdeaService, ProjectIdeaService>();
+builder.Services.AddScoped<IVoteService, VoteService>();
 
 var app = builder.Build();
 

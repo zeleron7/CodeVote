@@ -8,12 +8,10 @@ namespace CodeVote.AutoMapper
     {
         public MappingProfile()
         {
-
             //project idea
             CreateMap<CreateProjectIdeaDTO, ProjectIdeaDbM>();
-
-            CreateMap<ProjectIdeaDbM, ReadProjectIdeaDTO>()
-                .ForMember(dest => dest.VoteCount, opt => opt.MapFrom(src => src.Votes.Count));
+            CreateMap<ProjectIdeaDbM, ReadProjectIdeaDTO>();
+            CreateMap<UpdateProjectIdeaDTO, ProjectIdeaDbM>();
 
             //user
             CreateMap<CreateUserDTO, UserDbM>();

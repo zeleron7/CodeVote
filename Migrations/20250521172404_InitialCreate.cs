@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CodeVote.Migrations
 {
     /// <inheritdoc />
-    public partial class mssqllocal_migration_742 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,37 +46,35 @@ namespace CodeVote.Migrations
                 columns: table => new
                 {
                     VoteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    ProjectIdeaId = table.Column<int>(type: "int", nullable: false),
-                    ProjectIdeaDbMProjectIdeaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserDbMUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProjectIdeaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Votes", x => x.VoteId);
                     table.ForeignKey(
-                        name: "FK_Votes_ProjectIdeas_ProjectIdeaDbMProjectIdeaId",
-                        column: x => x.ProjectIdeaDbMProjectIdeaId,
+                        name: "FK_Votes_ProjectIdeas_ProjectIdeaId",
+                        column: x => x.ProjectIdeaId,
                         principalTable: "ProjectIdeas",
                         principalColumn: "ProjectIdeaId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Votes_Users_UserDbMUserId",
-                        column: x => x.UserDbMUserId,
+                        name: "FK_Votes_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Votes_ProjectIdeaDbMProjectIdeaId",
+                name: "IX_Votes_ProjectIdeaId",
                 table: "Votes",
-                column: "ProjectIdeaDbMProjectIdeaId");
+                column: "ProjectIdeaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Votes_UserDbMUserId",
+                name: "IX_Votes_UserId",
                 table: "Votes",
-                column: "UserDbMUserId");
+                column: "UserId");
         }
 
         /// <inheritdoc />

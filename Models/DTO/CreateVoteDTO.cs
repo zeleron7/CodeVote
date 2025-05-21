@@ -2,7 +2,7 @@
 {
     public class CreateVoteDTO
     {
-        public int UserId { get; set; }
-        public int ProjectIdeaId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid ProjectIdeaId { get; set; }
     }
 }

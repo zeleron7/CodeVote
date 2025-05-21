@@ -33,5 +33,41 @@ namespace CodeVote.Services
                 .ToListAsync();
             return _mapper.Map<List<ReadProjectIdeaDTO>>(projectIdeaEntities);
         }
+
+        public async Task<ReadProjectIdeaDTO> GetProjectIdeaByIdAsync(Guid projectIdeaId)
+        {
+            var projectIdeaEntity = await _context.ProjectIdeas
+                .Include(p => p.VoteDbM)
+                .FirstOrDefaultAsync(p => p.ProjectIdeaId == projectIdeaId);
+            if (projectIdeaEntity == null)
+            {
+                return null;
+            }
+            return _mapper.Map<ReadProjectIdeaDTO>(projectIdeaEntity);
+        }
+
+        public async Task<ReadProjectIdeaDTO> UpdateProjectIdeaAsync(Guid projectIdeaId, UpdateProjectIdeaDTO updateProjectIdeaDto)
+        {
+            var projectIdeaEntity = await _context.ProjectIdeas.FindAsync(projectIdeaId);
+            if (projectIdeaEntity == null)
+            {
+                return null;
+            }
+            _mapper.Map(updateProjectIdeaDto, projectIdeaEntity);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<ReadProjectIdeaDTO>(projectIdeaEntity);
+        }
+
+        public async Task<bool> DeleteProjectIdeaAsync(Guid projectIdeaId)
+        {
+            var projectIdeaEntity = await _context.ProjectIdeas.FindAsync(projectIdeaId);
+            if (projectIdeaEntity == null)
+            {
+                return false;
+            }
+            _context.ProjectIdeas.Remove(projectIdeaEntity);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

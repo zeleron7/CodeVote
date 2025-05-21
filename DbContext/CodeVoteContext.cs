@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CodeVote.DbModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace CodeVote.Data
 {
@@ -18,4 +20,6 @@ namespace CodeVote.Data
         public DbSet<UserDbM> Users { get; set; }
         public DbSet<VoteDbM> Votes { get; set; }
     }
+
+   
 }

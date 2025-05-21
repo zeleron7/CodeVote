@@ -33,6 +33,24 @@ namespace CodeVote.Controllers
             return Ok(users);
         }
 
+        // GET: api/ProjectIdea
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<ReadProjectIdeaDTO>>> GetOneProjectIdea(Guid id)
+        {
+            var projectidea = await _projectIdeaService.GetProjectIdeaByIdAsync(id);
+            return Ok(projectidea);
+        }
+
+        // GET: api/ProjectIdea
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProjectIdea(Guid id, UpdateProjectIdeaDTO updateprojectideaDto)
+        {
+            var updatedProjectidea = await _projectIdeaService.UpdateProjectIdeaAsync(id, updateprojectideaDto);
+            if (updatedProjectidea == null)
+                return NotFound();
+
+            return Ok(updatedProjectidea);
+        }
 
 
         // POST: api/ProjectIdea
@@ -45,6 +63,16 @@ namespace CodeVote.Controllers
             return createdProjectIdea;
         }
 
+        //DELETE: api/ProjectIdea
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProjectIdea(Guid id)
+        {
+            var success = await _projectIdeaService.DeleteProjectIdeaAsync(id);
+            if (!success)
+                return NotFound();
+
+            return NoContent();
+        }
 
 
         private bool ProjectIdeaDbMExists(Guid id)
