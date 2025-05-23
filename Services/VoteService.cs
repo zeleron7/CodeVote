@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CodeVote.Data;
-using CodeVote.Models.DTO;
+using CodeVote.DTO;
 using CodeVote.DbModels;
 using Microsoft.EntityFrameworkCore;
 using CodeVote.Models;
@@ -38,6 +38,10 @@ namespace CodeVote.Services
 
             _context.Votes.Add(vote);
             await _context.SaveChangesAsync();
+
+                var savedVote = await _context.Votes
+            .Include(v => v.ProjectIdeaDbM)  // Make sure to include ProjectIdea for mapping
+            .FirstOrDefaultAsync(v => v.VoteId == vote.VoteId);
 
             // Map to ReadVoteDTO 
             return _mapper.Map<ReadVoteDTO>(vote);

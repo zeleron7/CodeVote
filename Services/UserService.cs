@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CodeVote.Data;
-using CodeVote.Models.DTO;
+using CodeVote.DTO;
 using CodeVote.DbModels;
 using Microsoft.EntityFrameworkCore;
 using CodeVote.Models;

@@ -1,4 +1,4 @@
-﻿using CodeVote.Models.DTO;
+﻿using CodeVote.DTO;
 
 namespace CodeVote.Services
 {

@@ -1,4 +1,4 @@
-﻿namespace CodeVote.Models.DTO
+﻿namespace CodeVote.DTO
 {
     public class ReadProjectIdeaDTO
     {

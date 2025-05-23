@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CodeVote.DbModels;
-using CodeVote.Models.DTO;
+using CodeVote.DTO;
 
 namespace CodeVote.AutoMapper
 {
@@ -20,7 +20,9 @@ namespace CodeVote.AutoMapper
 
             //vote
             CreateMap<CreateVoteDTO, VoteDbM>();
-            CreateMap<VoteDbM, ReadVoteDTO>();
+            CreateMap<VoteDbM, ReadVoteDTO>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.ProjectIdeaDbM.Title))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.ProjectIdeaDbM.Description)); 
         }
     }
 }

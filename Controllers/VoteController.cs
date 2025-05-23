@@ -9,7 +9,7 @@ using CodeVote.Data;
 using CodeVote.DbModels;
 using CodeVote.Interfaces;
 using CodeVote.Services;
-using CodeVote.Models.DTO;
+using CodeVote.DTO;
 
 namespace CodeVote.Controllers
 {

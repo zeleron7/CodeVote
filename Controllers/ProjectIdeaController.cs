@@ -1,5 +1,5 @@
 ﻿using CodeVote.Data;
-using CodeVote.Models.DTO;
+using CodeVote.DTO;
 using CodeVote.Services;
 using Microsoft.AspNetCore.Mvc;
 

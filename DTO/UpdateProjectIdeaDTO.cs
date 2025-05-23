@@ -1,6 +1,6 @@
-﻿namespace CodeVote.Models.DTO
+﻿namespace CodeVote.DTO
 {
-    public class CreateProjectIdeaDTO
+    public class UpdateProjectIdeaDTO
     {
         public string Title { get; set; }
         public string Description { get; set; }
