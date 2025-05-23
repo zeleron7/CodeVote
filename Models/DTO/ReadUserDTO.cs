@@ -1,6 +1,4 @@
-﻿using CodeVote.DbModels;
-
-namespace CodeVote.Models.DTO
+﻿namespace CodeVote.Models.DTO
 {
     public class ReadUserDTO
     {

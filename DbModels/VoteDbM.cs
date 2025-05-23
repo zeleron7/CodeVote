@@ -10,12 +10,8 @@ namespace CodeVote.DbModels
     {
         [Key]
         public override Guid VoteId { get; set; }
-
         public override Guid UserId { get; set; }
         public override Guid ProjectIdeaId { get; set; }
-
-
-
 
         [NotMapped]
         public override IUser User { get => UserDbM; set => throw new NotImplementedException(); }

@@ -30,6 +30,9 @@ namespace CodeVote.Controllers
         public async Task<ActionResult<List<ReadUserDTO>>> GetAllUsers()
         {
             var users = await _userService.GetAllUsersAsync();
+            if (users == null)
+                return NotFound();
+
             return Ok(users);
         }
 
@@ -38,9 +41,13 @@ namespace CodeVote.Controllers
         public async Task<ActionResult<List<ReadUserDTO>>> GetOneUser(Guid id)
         {
             var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
             return Ok(user);
         }
 
+        // PUT: api/User
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, UpdateUserDTO updateUserDto)
         {
@@ -51,14 +58,14 @@ namespace CodeVote.Controllers
             return Ok(updatedUser);
         }
 
-
-
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ReadUserDTO>> CreateUser(CreateUserDTO createUserDto)
         {
             var createdUser = await _userService.CreateUserAsync(createUserDto);
+            if (createdUser == null)
+                return BadRequest();
 
             return createdUser;
         }
@@ -72,11 +79,6 @@ namespace CodeVote.Controllers
                 return NotFound();
 
             return NoContent();
-        }
-
-        private bool UserDbMExists(Guid id)
-        {
-            return _context.Users.Any(e => e.UserId == id);
         }
     }
 }

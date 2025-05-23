@@ -21,11 +21,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-
-//
+// DI for services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectIdeaService, ProjectIdeaService>();
 builder.Services.AddScoped<IVoteService, VoteService>();

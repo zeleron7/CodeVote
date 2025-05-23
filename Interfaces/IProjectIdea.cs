@@ -8,5 +8,5 @@
         public int VoteCount { get; set; }
 
         public List<IVote> Votes { get; set; }
-}
+    }
 }

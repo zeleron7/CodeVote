@@ -26,24 +26,19 @@ namespace CodeVote.Controllers
             _voteService = voteService;
         }
 
-
         // POST: api/Vote
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ReadVoteDTO>> Vote(CreateVoteDTO createVoteDto)
         {
-            if (createVoteDto == null)
-                return BadRequest("Invalid vote data.");
-
             var createdVote = await _voteService.CreateVoteAsync(createVoteDto);
-
             if (createdVote == null)
                 return BadRequest("Vote could not be created.");
 
             return Ok(createdVote);
         }
 
-        // DELETE: api/Vote/5
+        // DELETE: api/Vote
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVote(Guid id)
         {
@@ -52,11 +47,6 @@ namespace CodeVote.Controllers
                 return NotFound();
 
             return NoContent();
-        }
-
-        private bool VoteDbMExists(Guid id)
-        {
-            return _context.Votes.Any(e => e.VoteId == id);
         }
     }
 }

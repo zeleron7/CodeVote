@@ -20,12 +20,10 @@ namespace CodeVote.Services
 
         public async Task<ReadVoteDTO> CreateVoteAsync(CreateVoteDTO voteDto)
         {
-            // Check if user exists
             var userExists = await _context.Users.AnyAsync(u => u.UserId == voteDto.UserId);
             if (!userExists)
                 return null;
 
-            // Check if project idea exists
             var projectExists = await _context.ProjectIdeas.AnyAsync(p => p.ProjectIdeaId == voteDto.ProjectIdeaId);
             if (!projectExists)
                 return null;
@@ -34,17 +32,16 @@ namespace CodeVote.Services
             var vote = new VoteDbM
             {
                 VoteId = Guid.NewGuid(),
-                UserId = voteDto.UserId,         // <-- Important: assign these keys
+                UserId = voteDto.UserId,         
                 ProjectIdeaId = voteDto.ProjectIdeaId
             };
 
             _context.Votes.Add(vote);
             await _context.SaveChangesAsync();
 
-            // Map to ReadVoteDTO (if you use AutoMapper)
+            // Map to ReadVoteDTO 
             return _mapper.Map<ReadVoteDTO>(vote);
         }
-
 
         public async Task<bool> DeleteVoteAsync(Guid voteId)
         {
