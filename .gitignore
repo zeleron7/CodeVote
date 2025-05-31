@@ -369,4 +369,4 @@ appsettings.Production.json
 
 #log files
 *.log
-Logs/
+/Logs/log-20250531.txt
