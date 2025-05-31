@@ -11,11 +11,13 @@ namespace CodeVote.Controllers
     {
         private readonly CodeVoteContext _context;
         private readonly IProjectIdeaService _projectIdeaService;
+        private readonly ILogger<ProjectIdeaController> _logger;
 
-        public ProjectIdeaController(CodeVoteContext context, IProjectIdeaService projectIdeaService)
+        public ProjectIdeaController(CodeVoteContext context, IProjectIdeaService projectIdeaService, ILogger<ProjectIdeaController> logger)
         {
             _context = context;
             _projectIdeaService = projectIdeaService;
+            _logger = logger;
         }
 
         // GET: api/ProjectIdea
@@ -52,7 +54,6 @@ namespace CodeVote.Controllers
         }
 
         // POST: api/ProjectIdea
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ReadProjectIdeaDTO>> CreateProjectIdea(CreateProjectIdeaDTO createProjectIdea)
         {

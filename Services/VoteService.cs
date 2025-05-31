@@ -24,8 +24,9 @@ namespace CodeVote.Services
             if (!userExists)
                 return null;
 
-            var projectExists = await _context.ProjectIdeas.AnyAsync(p => p.ProjectIdeaId == voteDto.ProjectIdeaId);
-            if (!projectExists)
+            var project = await _context.ProjectIdeas
+            .FirstOrDefaultAsync(p => p.ProjectIdeaId == voteDto.ProjectIdeaId);
+            if (project == null)
                 return null;
 
             // Create and save vote
@@ -37,6 +38,9 @@ namespace CodeVote.Services
             };
 
             _context.Votes.Add(vote);
+
+            project.VoteCount += 1;
+
             await _context.SaveChangesAsync();
 
                 var savedVote = await _context.Votes

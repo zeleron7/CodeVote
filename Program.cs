@@ -5,12 +5,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using CodeVote.Data;
 using CodeVote.Services;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CodeVoteContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("CodeVoteContext")
             ?? throw new InvalidOperationException("Connection string 'CodeVoteContext' not found.")));
+
+// Serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
