@@ -32,6 +32,7 @@ namespace CodeVote.Controllers
         public async Task<ActionResult<List<ReadUserDTO>>> GetAllUsers()
         {
             _logger.LogInformation("Fetching all users");
+
             var users = await _userService.GetAllUsersAsync();
             if (users == null)
                 return NotFound();
@@ -43,7 +44,8 @@ namespace CodeVote.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<List<ReadUserDTO>>> GetOneUser(Guid id)
         {
-            _logger.LogInformation($"Fetching user with ID: {id}");
+            _logger.LogInformation("Fetching user with ID: {id}", id);
+
             var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
                 return NotFound();
@@ -55,7 +57,8 @@ namespace CodeVote.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, UpdateUserDTO updateUserDto)
         {
-            _logger.LogInformation($"Updating user with ID: {id}");
+            _logger.LogInformation("Updating user with ID: {id}", id);
+
             var updatedUser = await _userService.UpdateUserAsync(id, updateUserDto);
             if (updatedUser == null)
                 return NotFound();
@@ -68,6 +71,7 @@ namespace CodeVote.Controllers
         public async Task<ActionResult<ReadUserDTO>> CreateUser(CreateUserDTO createUserDto)
         {
             _logger.LogInformation("Creating a new user");
+
             var createdUser = await _userService.CreateUserAsync(createUserDto);
             if (createdUser == null)
                 return BadRequest();
@@ -79,7 +83,8 @@ namespace CodeVote.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            _logger.LogInformation($"Deleting user with ID: {id}");
+            _logger.LogInformation("Deleting user with ID: {id}", id);
+
             var success = await _userService.DeleteUserAsync(id);
             if (!success)
                 return NotFound();

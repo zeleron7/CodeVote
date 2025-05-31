@@ -34,6 +34,7 @@ namespace CodeVote.Controllers
         public async Task<ActionResult<ReadVoteDTO>> Vote(CreateVoteDTO createVoteDto)
         {
             _logger.LogInformation("Creating a new vote");
+
             var createdVote = await _voteService.CreateVoteAsync(createVoteDto);
             if (createdVote == null)
                 return BadRequest("Vote could not be created.");
@@ -45,7 +46,8 @@ namespace CodeVote.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVote(Guid id)
         {
-            _logger.LogInformation($"Deleting vote with ID: {id}");
+            _logger.LogInformation("Deleting vote with ID: {id}", id);
+
             var success = await _voteService.DeleteVoteAsync(id);
             if (!success)
                 return NotFound();

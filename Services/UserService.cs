@@ -11,65 +11,155 @@ namespace CodeVote.Services
     {
         private readonly CodeVoteContext _context;
         private readonly IMapper _mapper;   
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(CodeVoteContext context, IMapper mapper)
+        public UserService(CodeVoteContext context, IMapper mapper, ILogger<UserService> logger)
         {
             _context = context;
             _mapper = mapper;
+            _logger = logger;
         }
 
+        // Create a new user
         public async Task<ReadUserDTO> CreateUserAsync(CreateUserDTO user)
         {
-            var userDbM = _mapper.Map<UserDbM>(user);
-            await _context.Users.AddAsync(userDbM);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (user == null)
+                {
+                    _logger.LogWarning("CreateUserAsync: user is null");
+                    return null;
+                }
 
-            return _mapper.Map<ReadUserDTO>(userDbM);
+                var userDbM = _mapper.Map<UserDbM>(user);
+                await _context.Users.AddAsync(userDbM);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User created successfully with ID: {UserId}", userDbM.UserId);
+
+                return _mapper.Map<ReadUserDTO>(userDbM);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in CreateUserAsync");
+                throw;
+            } 
         }
 
+        // Get all users
         public async Task<List<ReadUserDTO>> GetAllUsersAsync()
         {
-            var userEntities = await _context.Users
+            try
+            {
+                var userEntities = await _context.Users
                 .Include(u => u.VoteDbM)
                 .ToListAsync();
 
-            return _mapper.Map<List<ReadUserDTO>>(userEntities);
+                _logger.LogInformation("Retrieved {Count} users", userEntities.Count);
+
+                return _mapper.Map<List<ReadUserDTO>>(userEntities);
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex, "Error in GetAllUsersAsync");
+                throw;
+            }
         }
 
+        // Get a user by ID
         public async Task<ReadUserDTO> GetUserByIdAsync(Guid userId)
         {
-            var userEntity = await _context.Users
+            try
+            {
+                if (userId == Guid.Empty)
+                {
+                    _logger.LogWarning("GetUserByIdAsync: userId is empty");
+                    return null;
+                }
+
+                var userEntity = await _context.Users
                 .Include(u => u.VoteDbM)
                 .FirstOrDefaultAsync(u => u.UserId == userId);
-            if (userEntity == null)
-            {
-                return null;
+
+                if (userEntity == null)
+                {
+                    _logger.LogWarning("GetUserByIdAsync: No user found with ID: {UserId}", userId);
+                    return null;
+                }
+
+                _logger.LogInformation("User retrieved successfully with ID: {UserId}", userEntity.UserId);
+
+                return _mapper.Map<ReadUserDTO>(userEntity);
             }
-            return _mapper.Map<ReadUserDTO>(userEntity);
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex, "Error in GetUserByIdAsync");
+                throw;
+            }
         }
 
+        // Update a user
         public async Task<ReadUserDTO> UpdateUserAsync(Guid userId, UpdateUserDTO updateUserDto)
         {
-            var userEntity = await _context.Users.FindAsync(userId);
-            if (userEntity == null)
+            try
             {
-                return null;
+                if (userId == Guid.Empty)
+                {
+                    _logger.LogWarning("UpdateUserAsync: userId is empty");
+                    return null;
+                }
+
+                var userEntity = await _context.Users.FindAsync(userId);
+                if (userEntity == null)
+                {
+                    _logger.LogWarning("UpdateUserAsync: userEntity is null for UserId {UserId}", userId);
+                    return null;
+                }
+
+                _mapper.Map(updateUserDto, userEntity);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User updated successfully with ID: {UserId}", userEntity.UserId);
+
+                return _mapper.Map<ReadUserDTO>(userEntity);
             }
-            _mapper.Map(updateUserDto, userEntity);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<ReadUserDTO>(userEntity);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in UpdateUserAsync");
+                throw;
+            }
         }
 
+        // Delete a user
         public async Task<bool> DeleteUserAsync(Guid userId)
         {
-            var userEntity = await _context.Users.FindAsync(userId);
-            if (userEntity == null)
+            try
             {
-                return false;
+                if (userId == Guid.Empty)
+                {
+                    _logger.LogWarning("DeleteUserAsync: userId is empty");
+                    return false;
+                }
+
+                var userEntity = await _context.Users.FindAsync(userId);
+                if (userEntity == null)
+                {
+                    _logger.LogWarning("DeleteUserAsync: userEntity is null for UserId {UserId}", userId);
+                    return false;
+                }
+
+                _context.Users.Remove(userEntity);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User deleted successfully with ID: {UserId}", userEntity.UserId);
+
+                return true;
             }
-            _context.Users.Remove(userEntity);
-            await _context.SaveChangesAsync();
-            return true;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in DeleteUserAsync");
+                throw;
+            }
         }
     }
 }

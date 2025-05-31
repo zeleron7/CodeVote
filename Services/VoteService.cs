@@ -11,56 +11,93 @@ namespace CodeVote.Services
     {
         private readonly CodeVoteContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger<VoteService> _logger;
 
-        public VoteService(CodeVoteContext context, IMapper mapper)
+        public VoteService(CodeVoteContext context, IMapper mapper, ILogger<VoteService> logger)
         {
             _context = context;
             _mapper = mapper;
+            _logger = logger;
         }
 
+        // Create a new vote
         public async Task<ReadVoteDTO> CreateVoteAsync(CreateVoteDTO voteDto)
         {
-            var userExists = await _context.Users.AnyAsync(u => u.UserId == voteDto.UserId);
-            if (!userExists)
-                return null;
-
-            var project = await _context.ProjectIdeas
-            .FirstOrDefaultAsync(p => p.ProjectIdeaId == voteDto.ProjectIdeaId);
-            if (project == null)
-                return null;
-
-            // Create and save vote
-            var vote = new VoteDbM
+            try
             {
-                VoteId = Guid.NewGuid(),
-                UserId = voteDto.UserId,         
-                ProjectIdeaId = voteDto.ProjectIdeaId
-            };
+                var userExists = await _context.Users.AnyAsync(u => u.UserId == voteDto.UserId);
+                if (!userExists)
+                {
+                    _logger.LogWarning("User with ID {UserId} does not exist.", voteDto.UserId);
+                    return null;
+                }
+                    
+                var project = await _context.ProjectIdeas
+                .FirstOrDefaultAsync(p => p.ProjectIdeaId == voteDto.ProjectIdeaId);
+                if (project == null)
+                {
+                    _logger.LogWarning("Project idea with ID {ProjectIdeaId} does not exist.", voteDto.ProjectIdeaId);
+                    return null;
+                }
+                
+                // Create and save vote
+                var vote = new VoteDbM
+                {
+                    VoteId = Guid.NewGuid(),
+                    UserId = voteDto.UserId,
+                    ProjectIdeaId = voteDto.ProjectIdeaId
+                };
 
-            _context.Votes.Add(vote);
+                _context.Votes.Add(vote);
+                project.VoteCount += 1;
 
-            project.VoteCount += 1;
+                await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
+                _logger.LogInformation("Vote created successfully ({VoteId}) for project idea ({ProjectIdeaId})", vote.VoteId, project.ProjectIdeaId);
 
                 var savedVote = await _context.Votes
-            .Include(v => v.ProjectIdeaDbM)  // Make sure to include ProjectIdea for mapping
-            .FirstOrDefaultAsync(v => v.VoteId == vote.VoteId);
+                    .Include(v => v.ProjectIdeaDbM)
+                    .FirstOrDefaultAsync(v => v.VoteId == vote.VoteId);
 
-            // Map to ReadVoteDTO 
-            return _mapper.Map<ReadVoteDTO>(vote);
+                return _mapper.Map<ReadVoteDTO>(savedVote);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in CreateVoteAsync");
+                throw;
+            }
         }
 
+        // Delete a vote by ID
         public async Task<bool> DeleteVoteAsync(Guid voteId)
         {
-            var voteEntity = await _context.Votes.FindAsync(voteId);
-            if (voteEntity == null)
+            try
             {
-                return false;
+                if (voteId == Guid.Empty)
+                {
+                    _logger.LogWarning("DeleteVoteAsync: voteId is empty");
+                    return false;
+                }
+
+                var voteEntity = await _context.Votes.FindAsync(voteId);
+                if (voteEntity == null)
+                {
+                    _logger.LogWarning("Vote with ID {VoteId} does not exist.", voteId);
+                    return false;
+                }
+
+                _context.Votes.Remove(voteEntity);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Vote deleted successfully ({VoteId})", voteId);
+
+                return true;
             }
-            _context.Votes.Remove(voteEntity);
-            await _context.SaveChangesAsync();
-            return true;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in DeleteVoteAsync");
+                throw;
+            }
         }
     }
 }

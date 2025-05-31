@@ -26,6 +26,7 @@ namespace CodeVote.Controllers
         {
             _logger.LogInformation("Fetching all project ideas");
             var users = await _projectIdeaService.GetAllProjectIdeasAsync();
+
             if (users == null)
                 return NotFound();
 
@@ -36,7 +37,8 @@ namespace CodeVote.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<List<ReadProjectIdeaDTO>>> GetOneProjectIdea(Guid id)
         {
-            _logger.LogInformation($"Fetching project idea with ID: {id}");
+            _logger.LogInformation("Fetching project idea with ID: {id}", id);
+
             var projectidea = await _projectIdeaService.GetProjectIdeaByIdAsync(id);
             if (projectidea == null)
                 return NotFound();
@@ -48,7 +50,8 @@ namespace CodeVote.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProjectIdea(Guid id, UpdateProjectIdeaDTO updateprojectideaDto)
         {
-            _logger.LogInformation($"Updating project idea with ID: {id}");
+            _logger.LogInformation("Updating project idea with ID: {id}", id);
+
             var updatedProjectidea = await _projectIdeaService.UpdateProjectIdeaAsync(id, updateprojectideaDto);
             if (updatedProjectidea == null)
                 return NotFound();
@@ -61,6 +64,7 @@ namespace CodeVote.Controllers
         public async Task<ActionResult<ReadProjectIdeaDTO>> CreateProjectIdea(CreateProjectIdeaDTO createProjectIdea)
         {
             _logger.LogInformation("Creating a new project idea");
+
             var createdProjectIdea = await _projectIdeaService.CreateProjectIdeaAsync(createProjectIdea);
             if (createdProjectIdea == null)
                 return BadRequest();
@@ -72,7 +76,8 @@ namespace CodeVote.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProjectIdea(Guid id)
         {
-            _logger.LogInformation($"Deleting project idea with ID: {id}");
+            _logger.LogInformation("Deleting project idea with ID: {id}", id);
+
             var success = await _projectIdeaService.DeleteProjectIdeaAsync(id);
             if (!success)
                 return NotFound();
