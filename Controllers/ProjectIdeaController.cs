@@ -1,6 +1,7 @@
 ﻿using CodeVote.Data;
 using CodeVote.DTO;
 using CodeVote.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeVote.Controllers
@@ -47,6 +48,7 @@ namespace CodeVote.Controllers
         }
 
         // PUT: api/ProjectIdea
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProjectIdea(Guid id, UpdateProjectIdeaDTO updateprojectideaDto)
         {
@@ -60,6 +62,7 @@ namespace CodeVote.Controllers
         }
 
         // POST: api/ProjectIdea
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ReadProjectIdeaDTO>> CreateProjectIdea(CreateProjectIdeaDTO createProjectIdea)
         {
@@ -73,6 +76,7 @@ namespace CodeVote.Controllers
         }
 
         //DELETE: api/ProjectIdea
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProjectIdea(Guid id)
         {

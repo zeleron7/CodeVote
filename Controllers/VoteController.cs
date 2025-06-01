@@ -11,6 +11,7 @@ using CodeVote.Interfaces;
 using CodeVote.Services;
 using CodeVote.DTO;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CodeVote.Controllers
 {
@@ -30,6 +31,7 @@ namespace CodeVote.Controllers
         }
 
         // POST: api/Vote
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ReadVoteDTO>> Vote(CreateVoteDTO createVoteDto)
         {
@@ -43,6 +45,7 @@ namespace CodeVote.Controllers
         }
 
         // DELETE: api/Vote
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVote(Guid id)
         {
