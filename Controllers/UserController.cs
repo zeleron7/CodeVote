@@ -9,6 +9,7 @@ using CodeVote.Data;
 using CodeVote.DbModels;
 using CodeVote.Services;
 using CodeVote.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CodeVote.Controllers
 {
@@ -28,6 +29,7 @@ namespace CodeVote.Controllers
         }
 
         // GET: api/User
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<ReadUserDTO>>> GetAllUsers()
         {
@@ -41,6 +43,7 @@ namespace CodeVote.Controllers
         }
 
         // GET: api/User
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<List<ReadUserDTO>>> GetOneUser(Guid id)
         {
@@ -54,6 +57,7 @@ namespace CodeVote.Controllers
         }
 
         // PUT: api/User
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, UpdateUserDTO updateUserDto)
         {
@@ -67,6 +71,7 @@ namespace CodeVote.Controllers
         }
 
         // POST: api/User
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ReadUserDTO>> CreateUser(CreateUserDTO createUserDto)
         {
@@ -80,6 +85,7 @@ namespace CodeVote.Controllers
         }
 
         //DELETE: api/User
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
