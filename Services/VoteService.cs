@@ -79,11 +79,20 @@ namespace CodeVote.Services
                     return false;
                 }
 
-                var voteEntity = await _context.Votes.FindAsync(voteId);
+                var voteEntity = await _context.Votes
+                   .Include(v => v.ProjectIdeaDbM) 
+                   .FirstOrDefaultAsync(v => v.VoteId == voteId);
+
                 if (voteEntity == null)
                 {
                     _logger.LogWarning("Vote with ID {VoteId} does not exist.", voteId);
                     return false;
+                }
+
+                // Subtract 1 from vote count
+                if (voteEntity.ProjectIdeaDbM != null && voteEntity.ProjectIdeaDbM.VoteCount > 0)
+                {
+                    voteEntity.ProjectIdeaDbM.VoteCount -= 1;
                 }
 
                 _context.Votes.Remove(voteEntity);
