@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CodeVote.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("CodeVote/[controller]")]
     [ApiController]
     public class VoteController : ControllerBase
     {
@@ -30,7 +30,7 @@ namespace CodeVote.Controllers
             _logger = logger;
         }
 
-        // POST: api/Vote
+        // POST: CodeVote/Vote
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<ReadVoteDTO>> Vote(CreateVoteDTO createVoteDto)
@@ -44,9 +44,9 @@ namespace CodeVote.Controllers
             return Ok(createdVote);
         }
 
-        // DELETE: api/Vote
+        // DELETE: CodeVote/Vote/Delete/{id}
         [Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteVote(Guid id)
         {
             _logger.LogInformation("Deleting vote with ID: {id}", id);

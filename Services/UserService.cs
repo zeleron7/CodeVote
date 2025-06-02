@@ -21,6 +21,7 @@ namespace CodeVote.Services
         }
 
         // Create a new user
+        #region CreateUserAsync
         public async Task<ReadUserDTO> CreateUserAsync(CreateUserDTO user)
         {
             try
@@ -45,8 +46,10 @@ namespace CodeVote.Services
                 throw;
             } 
         }
+        #endregion
 
         // Get all users
+        #region GetAllUsersAsync
         public async Task<List<ReadUserDTO>> GetAllUsersAsync()
         {
             try
@@ -65,8 +68,10 @@ namespace CodeVote.Services
                 throw;
             }
         }
+        #endregion
 
         // Get a user by ID
+        #region GetUserByIdAsync
         public async Task<ReadUserDTO> GetUserByIdAsync(Guid userId)
         {
             try
@@ -97,8 +102,10 @@ namespace CodeVote.Services
                 throw;
             }
         }
+        #endregion
 
         // Update a user
+        #region UpdateUserAsync
         public async Task<ReadUserDTO> UpdateUserAsync(Guid userId, UpdateUserDTO updateUserDto)
         {
             try
@@ -129,8 +136,10 @@ namespace CodeVote.Services
                 throw;
             }
         }
+        #endregion
 
         // Delete a user
+        #region DeleteUserAsync
         public async Task<bool> DeleteUserAsync(Guid userId)
         {
             try
@@ -161,5 +170,6 @@ namespace CodeVote.Services
                 throw;
             }
         }
+        #endregion 
     }
 }

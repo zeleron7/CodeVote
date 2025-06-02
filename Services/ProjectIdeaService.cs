@@ -22,6 +22,7 @@ namespace CodeVote.Services
         }
 
         // Create a new project idea
+        #region CreateProjectIdeaAsync
         public async Task<ReadProjectIdeaDTO> CreateProjectIdeaAsync(CreateProjectIdeaDTO projectIdea)
         {
             try
@@ -46,8 +47,10 @@ namespace CodeVote.Services
                 throw;
             }  
         }
+        #endregion
 
         // Get all project ideas
+        #region GetAllProjectIdeasAsync
         public async Task<List<ReadProjectIdeaDTO>> GetAllProjectIdeasAsync()
         {
             try
@@ -66,8 +69,10 @@ namespace CodeVote.Services
                 throw;
             }
         }
+        #endregion
 
         // Get a project idea by ID
+        #region GetProjectIdeaByIdAsync
         public async Task<ReadProjectIdeaDTO> GetProjectIdeaByIdAsync(Guid projectIdeaId)
         {
             try
@@ -98,8 +103,10 @@ namespace CodeVote.Services
                 throw;
             }
         }
+        #endregion
 
         // Update a project idea
+        #region UpdateProjectIdeaAsync
         public async Task<ReadProjectIdeaDTO> UpdateProjectIdeaAsync(Guid projectIdeaId, UpdateProjectIdeaDTO updateProjectIdeaDto)
         {
             try
@@ -129,8 +136,10 @@ namespace CodeVote.Services
                 throw;
             }
         }
+        #endregion
 
         // Delete a project idea
+        #region DeleteProjectIdeaAsync
         public async Task<bool> DeleteProjectIdeaAsync(Guid projectIdeaId)
         {
             try
@@ -161,5 +170,6 @@ namespace CodeVote.Services
                 throw;
             }
         }
+        #endregion 
     }
 }
