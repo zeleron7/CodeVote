@@ -14,7 +14,12 @@ namespace CodeVote.AutoMapper
             CreateMap<UpdateProjectIdeaDTO, ProjectIdeaDbM>();
 
             //user
-            CreateMap<CreateUserDTO, UserDbM>();
+            CreateMap<CreateUserDTO, UserDbM>()
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src =>
+                string.IsNullOrWhiteSpace(src.FirstName) ? null : src.FirstName)) // Map FirstName and LastName to null if empty/whitespace instead of empty string                                                                 
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src =>
+                string.IsNullOrWhiteSpace(src.LastName) ? null : src.LastName));
+
             CreateMap<UserDbM, ReadUserDTO>();
             CreateMap<UpdateUserDTO, UserDbM>();
 

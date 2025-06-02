@@ -26,12 +26,12 @@ namespace CodeVote.Controllers
         public async Task<ActionResult<List<ReadProjectIdeaDTO>>> GetProjectIdeas()
         {
             _logger.LogInformation("Fetching all project ideas");
-            var users = await _projectIdeaService.GetAllProjectIdeasAsync();
+            var projectIdeas = await _projectIdeaService.GetAllProjectIdeasAsync();
 
-            if (users == null)
+            if (projectIdeas == null)
                 return NotFound();
 
-            return Ok(users);
+            return Ok(projectIdeas);
         }
 
         // GET: api/ProjectIdea

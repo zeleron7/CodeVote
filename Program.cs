@@ -68,6 +68,9 @@ builder.Services.AddSwaggerGen(c =>
 
     // Use the AuthorizeCheckOperationFilter to only apply "padlock" symbol to endpoints with [Authorize] attribute
     c.OperationFilter<AuthorizeCheckOperationFilter>();
+
+    // Use the RemoveStringDefaultsSchemaFilter to remove default values for string properties
+    c.SchemaFilter<ClearStringExamplesSchemaFilter>();
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

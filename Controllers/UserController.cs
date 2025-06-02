@@ -79,7 +79,7 @@ namespace CodeVote.Controllers
 
             var createdUser = await _userService.CreateUserAsync(createUserDto);
             if (createdUser == null)
-                return BadRequest();
+                return BadRequest("Could not create user");
 
             return createdUser;
         }

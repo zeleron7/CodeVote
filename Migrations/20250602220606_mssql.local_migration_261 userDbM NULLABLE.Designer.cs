@@ -4,6 +4,7 @@ using CodeVote.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeVote.Migrations
 {
     [DbContext(typeof(CodeVoteContext))]
-    partial class CodeVoteContextModelSnapshot : ModelSnapshot
+    [Migration("20250602220606_mssql.local_migration_261 userDbM NULLABLE")]
+    partial class mssqllocal_migration_261userDbMNULLABLE
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
