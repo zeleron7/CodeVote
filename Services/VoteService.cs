@@ -21,6 +21,7 @@ namespace CodeVote.Services
         }
 
         // Create a new vote
+        #region CreateVoteAsync
         public async Task<ReadVoteDTO> CreateVoteAsync(CreateVoteDTO voteDto)
         {
             try
@@ -67,8 +68,10 @@ namespace CodeVote.Services
                 throw;
             }
         }
+        #endregion
 
         // Delete a vote by ID
+        #region DeleteVoteAsync
         public async Task<bool> DeleteVoteAsync(Guid voteId)
         {
             try
@@ -108,5 +111,6 @@ namespace CodeVote.Services
                 throw;
             }
         }
+        #endregion 
     }
 }
