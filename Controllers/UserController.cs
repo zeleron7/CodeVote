@@ -29,7 +29,6 @@ namespace CodeVote.Controllers
         }
 
         // POST: CodeVote/User/Register
-        [Authorize]
         [HttpPost("Register")]
         public async Task<ActionResult<ReadUserDTO>> CreateUser(CreateUserDTO createUserDto)
         {

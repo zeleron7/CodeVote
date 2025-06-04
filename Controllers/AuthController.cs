@@ -1,6 +1,10 @@
-﻿using CodeVote.DbModels;
+﻿using CodeVote.Data;
+using CodeVote.DbModels;
 using CodeVote.DTO;
+using CodeVote.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,35 +18,56 @@ namespace CodeVote.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthController> _logger;
+        private readonly CodeVoteContext _context;
+        private readonly IPasswordHasher<UserDbM> _passwordHasher;
 
-        public AuthController(IConfiguration configuration, ILogger<AuthController> logger)
+        public AuthController(IConfiguration configuration, ILogger<AuthController> logger, CodeVoteContext context, IPasswordHasher<UserDbM> passwordHasher)
         {
             _configuration = configuration;
             _logger = logger;
+            _context = context;
+            _passwordHasher = passwordHasher;
         }
 
         // POST: CodeVote/Auth/Login
-        [HttpPost("login")]
-        public IActionResult Login(LoginUserDto user)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginUserDto user)
         {
-            _logger.LogInformation("Login attempt for user: {UserName}", user.UserName);
-
-            if (user.UserName == "admin" && user.Password == "password")
+            try
             {
-                _logger.LogInformation("User {UserName} authenticated successfully", user.UserName);
-                var token = GenerateJwtToken(user.UserName);
+                var userLogin = await _context.Users.SingleOrDefaultAsync(u => u.UserName == user.UserName); 
+                if (userLogin == null)
+                {
+                    _logger.LogWarning("Login failed: user not found for username {UserName}", user.UserName);
+                    return Unauthorized("Invalid username.");
+                }
+
+                var result = _passwordHasher.VerifyHashedPassword(userLogin, userLogin.PasswordHash, user.Password);
+
+                if (result != PasswordVerificationResult.Success)
+                {
+                    _logger.LogWarning("Login failed: incorrect password for username {UserName}", user.UserName);
+                    return Unauthorized("Invalid password.");
+                }
+
+                var token = GenerateJwtToken(userLogin); 
+
                 return Ok(new { token });
+
             }
-            _logger.LogWarning("Authentication failed for user: {UserName}", user.UserName);
-            return Unauthorized();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during login for user {UserName}", user.UserName);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        private string GenerateJwtToken(string username)
+        private string GenerateJwtToken(UserDbM userLogin) 
         {
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, userLogin.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             // JWT Key from appsettings.json / user secrets

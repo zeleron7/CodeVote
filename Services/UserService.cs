@@ -44,7 +44,6 @@ namespace CodeVote.Services
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation("User created successfully with ID: {UserId}", userDbM.UserId);
-
                 return _mapper.Map<ReadUserDTO>(userDbM);
             }
             catch (Exception ex)

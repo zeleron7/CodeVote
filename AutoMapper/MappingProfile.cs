@@ -32,8 +32,8 @@ namespace CodeVote.AutoMapper
                 // Map FirstName and LastName to null if empty/whitespace instead of empty string
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src =>
                 string.IsNullOrWhiteSpace(src.FirstName) ? null : src.FirstName))
-                                                                                  
-                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src =>         
+
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src =>
                 string.IsNullOrWhiteSpace(src.LastName) ? null : src.LastName));
 
             CreateMap<UserDbM, ReadUserDTO>();
