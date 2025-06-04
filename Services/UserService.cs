@@ -4,6 +4,7 @@ using CodeVote.DTO;
 using CodeVote.DbModels;
 using Microsoft.EntityFrameworkCore;
 using CodeVote.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CodeVote.Services
 {
@@ -12,12 +13,14 @@ namespace CodeVote.Services
         private readonly CodeVoteContext _context;
         private readonly IMapper _mapper;   
         private readonly ILogger<UserService> _logger;
+        private readonly IPasswordHasher<UserDbM> _passwordHasher;
 
-        public UserService(CodeVoteContext context, IMapper mapper, ILogger<UserService> logger)
+        public UserService(CodeVoteContext context, IMapper mapper, ILogger<UserService> logger, IPasswordHasher<UserDbM> passwordHasher)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _passwordHasher = passwordHasher;
         }
 
         // Create a new user
@@ -33,11 +36,14 @@ namespace CodeVote.Services
                 }
 
                 var userDbM = _mapper.Map<UserDbM>(user);
+
+                // Hash the password
+                userDbM.PasswordHash = _passwordHasher.HashPassword(userDbM, user.Password);
+
                 await _context.Users.AddAsync(userDbM);
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation("User created successfully with ID: {UserId}", userDbM.UserId);
-
                 return _mapper.Map<ReadUserDTO>(userDbM);
             }
             catch (Exception ex)

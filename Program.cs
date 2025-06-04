@@ -11,6 +11,8 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using CodeVote.Models;
+using CodeVote.DbModels;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CodeVoteContext>(options =>
@@ -79,6 +81,9 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectIdeaService, ProjectIdeaService>();
 builder.Services.AddScoped<IVoteService, VoteService>();
+
+// IpasswordHasher for UserDBM (used in UserService)
+builder.Services.AddScoped<IPasswordHasher<UserDbM>, PasswordHasher<UserDbM>>();
 
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
 @CodeVote_HostAddress = http://localhost:5132
 
-GET {{CodeVote_HostAddress}}/weatherforecast/
+GET {{CodeVote_HostAddress}}/ProjectIdea/GetAll
 Accept: application/json
 
 ###

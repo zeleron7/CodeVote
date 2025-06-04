@@ -39,7 +39,7 @@ namespace CodeVote.Controllers
 
             var createdVote = await _voteService.CreateVoteAsync(createVoteDto);
             if (createdVote == null)
-                return BadRequest("Vote could not be created.");
+                return BadRequest("Could not create vote");
 
             return Ok(createdVote);
         }
@@ -55,7 +55,7 @@ namespace CodeVote.Controllers
             if (!success)
                 return NotFound();
 
-            return NoContent();
+            return Ok("Vote deleted successfully");
         }
     }
 }

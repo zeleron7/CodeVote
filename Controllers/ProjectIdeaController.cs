@@ -30,7 +30,7 @@ namespace CodeVote.Controllers
 
             var createdProjectIdea = await _projectIdeaService.CreateProjectIdeaAsync(createProjectIdea);
             if (createdProjectIdea == null)
-                return BadRequest();
+                return BadRequest("Could not create project idea");
 
             return createdProjectIdea;
         }
@@ -40,8 +40,8 @@ namespace CodeVote.Controllers
         public async Task<ActionResult<List<ReadProjectIdeaDTO>>> GetProjectIdeas()
         {
             _logger.LogInformation("Fetching all project ideas");
-            var projectIdeas = await _projectIdeaService.GetAllProjectIdeasAsync();
 
+            var projectIdeas = await _projectIdeaService.GetAllProjectIdeasAsync();
             if (projectIdeas == null)
                 return NotFound();
 
@@ -86,7 +86,7 @@ namespace CodeVote.Controllers
             if (!success)
                 return NotFound();
 
-            return NoContent();
+            return Ok("Project idea deleted successfully");
         }
     }
 }
