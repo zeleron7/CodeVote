@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CodeVote.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("CodeVote/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -28,9 +28,23 @@ namespace CodeVote.Controllers
             _logger = logger;
         }
 
-        // GET: api/User
+        // POST: CodeVote/User/Register
         [Authorize]
-        [HttpGet]
+        [HttpPost("Register")]
+        public async Task<ActionResult<ReadUserDTO>> CreateUser(CreateUserDTO createUserDto)
+        {
+            _logger.LogInformation("Creating a new user");
+
+            var createdUser = await _userService.CreateUserAsync(createUserDto);
+            if (createdUser == null)
+                return BadRequest("Could not create user");
+
+            return createdUser;
+        }
+
+        // GET: CodeVote/User/GetAll
+        [Authorize]
+        [HttpGet("GetAll")]
         public async Task<ActionResult<List<ReadUserDTO>>> GetAllUsers()
         {
             _logger.LogInformation("Fetching all users");
@@ -42,7 +56,7 @@ namespace CodeVote.Controllers
             return Ok(users);
         }
 
-        // GET: api/User
+        // GET: CodeVote/User/{id}
         [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<List<ReadUserDTO>>> GetOneUser(Guid id)
@@ -56,9 +70,9 @@ namespace CodeVote.Controllers
             return Ok(user);
         }
 
-        // PUT: api/User
+        // PUT: CodeVote/User/Update/{id}
         [Authorize]
-        [HttpPut("{id}")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, UpdateUserDTO updateUserDto)
         {
             _logger.LogInformation("Updating user with ID: {id}", id);
@@ -70,23 +84,9 @@ namespace CodeVote.Controllers
             return Ok(updatedUser);
         }
 
-        // POST: api/User
+        //DELETE: CodeVote/User/Delete/{id}
         [Authorize]
-        [HttpPost]
-        public async Task<ActionResult<ReadUserDTO>> CreateUser(CreateUserDTO createUserDto)
-        {
-            _logger.LogInformation("Creating a new user");
-
-            var createdUser = await _userService.CreateUserAsync(createUserDto);
-            if (createdUser == null)
-                return BadRequest("Could not create user");
-
-            return createdUser;
-        }
-
-        //DELETE: api/User
-        [Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             _logger.LogInformation("Deleting user with ID: {id}", id);

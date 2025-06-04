@@ -8,25 +8,32 @@ using System.Text;
 
 namespace CodeVote.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("CodeVote/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, ILogger<AuthController> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
+        // POST: CodeVote/Auth/Login
         [HttpPost("login")]
         public IActionResult Login(LoginUserDto user)
         {
+            _logger.LogInformation("Login attempt for user: {UserName}", user.UserName);
+
             if (user.UserName == "admin" && user.Password == "password")
             {
+                _logger.LogInformation("User {UserName} authenticated successfully", user.UserName);
                 var token = GenerateJwtToken(user.UserName);
                 return Ok(new { token });
             }
+            _logger.LogWarning("Authentication failed for user: {UserName}", user.UserName);
             return Unauthorized();
         }
 

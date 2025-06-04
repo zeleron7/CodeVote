@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CodeVote.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("CodeVote/[controller]")]
     [ApiController]
     public class ProjectIdeaController : ControllerBase
     {
@@ -21,8 +21,22 @@ namespace CodeVote.Controllers
             _logger = logger;
         }
 
-        // GET: api/ProjectIdea
-        [HttpGet]
+        // POST: CodeVote/ProjectIdea/Create
+        [Authorize]
+        [HttpPost("Create")]
+        public async Task<ActionResult<ReadProjectIdeaDTO>> CreateProjectIdea(CreateProjectIdeaDTO createProjectIdea)
+        {
+            _logger.LogInformation("Creating a new project idea");
+
+            var createdProjectIdea = await _projectIdeaService.CreateProjectIdeaAsync(createProjectIdea);
+            if (createdProjectIdea == null)
+                return BadRequest();
+
+            return createdProjectIdea;
+        }
+
+        // GET: CodeVote/ProjectIdea/GetAll
+        [HttpGet("GetAll")]
         public async Task<ActionResult<List<ReadProjectIdeaDTO>>> GetProjectIdeas()
         {
             _logger.LogInformation("Fetching all project ideas");
@@ -34,7 +48,7 @@ namespace CodeVote.Controllers
             return Ok(projectIdeas);
         }
 
-        // GET: api/ProjectIdea
+        // GET: CodeVote/ProjectIdea/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<List<ReadProjectIdeaDTO>>> GetOneProjectIdea(Guid id)
         {
@@ -47,9 +61,9 @@ namespace CodeVote.Controllers
             return Ok(projectidea);
         }
 
-        // PUT: api/ProjectIdea
+        // PUT: CodeVote/ProjectIdea/Update/{id}
         [Authorize]
-        [HttpPut("{id}")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdateProjectIdea(Guid id, UpdateProjectIdeaDTO updateprojectideaDto)
         {
             _logger.LogInformation("Updating project idea with ID: {id}", id);
@@ -61,23 +75,9 @@ namespace CodeVote.Controllers
             return Ok(updatedProjectidea);
         }
 
-        // POST: api/ProjectIdea
+        //DELETE: CodeVote/ProjectIdea/Delete/{id}
         [Authorize]
-        [HttpPost]
-        public async Task<ActionResult<ReadProjectIdeaDTO>> CreateProjectIdea(CreateProjectIdeaDTO createProjectIdea)
-        {
-            _logger.LogInformation("Creating a new project idea");
-
-            var createdProjectIdea = await _projectIdeaService.CreateProjectIdeaAsync(createProjectIdea);
-            if (createdProjectIdea == null)
-                return BadRequest();
-
-            return createdProjectIdea;
-        }
-
-        //DELETE: api/ProjectIdea
-        [Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteProjectIdea(Guid id)
         {
             _logger.LogInformation("Deleting project idea with ID: {id}", id);
