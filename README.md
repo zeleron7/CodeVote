@@ -41,8 +41,8 @@
 	- run "dotnet ef database update" to apply migrations 
 
 3. **Run the application**
-	- Register a new user via the `/api/auth/register` endpoint.
-	- Login using `/api/auth/login` to receive a JWT token.
+	- Register a new user via the `/CodeVote/User/Register` endpoint.
+	- Login using `/CodeVote/Auth/Login` to receive a JWT token.
 	- Authorize in the top right corner of Swagger UI with the token.
 
 
