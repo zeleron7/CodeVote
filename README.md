@@ -26,7 +26,7 @@
 
 ## 📜 Swagger documentation for API endpoints
 
-![CodeVote Architecture](Images/swaggerEndpoints.png)]
+![CodeVote Architecture](Images/swaggerEndpoints.png)
 
 ---
 
