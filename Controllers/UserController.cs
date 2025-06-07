@@ -94,7 +94,7 @@ namespace CodeVote.Controllers
             if (!success)
                 return NotFound();
 
-            return NoContent();
+            return Ok("User deleted successfully");
         }
     }
 }
