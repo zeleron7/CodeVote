@@ -81,6 +81,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectIdeaService, ProjectIdeaService>();
 builder.Services.AddScoped<IVoteService, VoteService>();
+builder.Services.AddScoped<ISeedDatabaseService, SeedDatabaseService>();
 
 // IpasswordHasher for UserDBM (used in UserService)
 builder.Services.AddScoped<IPasswordHasher<UserDbM>, PasswordHasher<UserDbM>>();

@@ -1,0 +1,62 @@
+[
+  {
+    "Title": "Blog Platform",
+    "Description": "A simple platform for writing, editing, and publishing blog posts."
+  },
+  {
+    "Title": "Weather App",
+    "Description": "Displays real-time weather data for any location using a weather API."
+  },
+  {
+    "Title": "Chat Application",
+    "Description": "A real-time chat app with user authentication and private rooms."
+  },
+  {
+    "Title": "Job Board",
+    "Description": "A platform where employers can post jobs and applicants can apply."
+  },
+  {
+    "Title": "To-Do List",
+    "Description": "A clean and interactive app to keep track of tasks and mark them as complete."
+  },
+  {
+    "Title": "URL Shortener",
+    "Description": "Generates short URLs that redirect to original long URLs."
+  },
+  {
+    "Title": "Online Polling System",
+    "Description": "Users can create and vote in polls, with results shown in real-time."
+  },
+  {
+    "Title": "Inventory Management System",
+    "Description": "Tool to track product stock, orders, and suppliers for small businesses."
+  },
+  {
+    "Title": "Online Learning Platform",
+    "Description": "A course management system with videos, quizzes, and progress tracking."
+  },
+  {
+    "Title": "Social Media Dashboard",
+    "Description": "An interface to manage and schedule posts across social media accounts."
+  },
+  {
+    "Title": "Customer Support Ticketing System",
+    "Description": "System to manage customer queries, assign support agents, and track resolution."
+  },
+  {
+    "Title": "Habit Tracker",
+    "Description": "App to help users build and maintain daily habits and routines."
+  },
+  {
+    "Title": "Crypto Price Tracker",
+    "Description": "Shows live cryptocurrency prices and historical charts."
+  },
+  {
+    "Title": "Language Learning App",
+    "Description": "Interactive platform to learn languages through vocabulary, quizzes, and challenges."
+  },
+  {
+    "Title": "Expense Splitter",
+    "Description": "Tool to divide bills among a group of people with a running balance log."
+  }
+]
