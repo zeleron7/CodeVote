@@ -40,6 +40,16 @@ namespace CodeVote.Services
                 // Hash the password
                 userDbM.PasswordHash = _passwordHasher.HashPassword(userDbM, user.Password);
 
+                // Check if user with the same username already exists
+                var userExists = await _context.Users
+                    .AnyAsync(u => u.UserName == user.UserName);
+
+                if (userExists)
+                {
+                    _logger.LogWarning("CreateUserAsync: User with username {UserName} already exists", user.UserName);
+                    return null; // handling null in AutoMapper > MappingProfile.cs
+                }
+
                 await _context.Users.AddAsync(userDbM);
                 await _context.SaveChangesAsync();
 
