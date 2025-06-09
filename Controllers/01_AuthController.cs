@@ -67,7 +67,8 @@ namespace CodeVote.Controllers
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userLogin.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("UserId", userLogin.UserId.ToString()),
             };
 
             // JWT Key from appsettings.json / user secrets
