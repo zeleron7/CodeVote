@@ -6,7 +6,6 @@ namespace CodeVote.Models
 {
     public class User : IUser 
     {
-        [Key]
         public virtual Guid UserId { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
