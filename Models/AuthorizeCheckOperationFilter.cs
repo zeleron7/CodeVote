@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CodeVote.Models
 {
-    // filter to add "padlock" icon to endpoints that require authorization, used in program.cs under AddSwaggerGen
+    // Filter to add "padlock" icon to endpoints that require authorization, used in program.cs under AddSwaggerGen
     public class AuthorizeCheckOperationFilter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)

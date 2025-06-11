@@ -9,6 +9,7 @@
         public string UserName { get; set; }
         public string PasswordHash { get; set; }
 
+        // User can have multiple votes
         public List<IVote> Votes { get; set; }
     }
 }

@@ -12,6 +12,8 @@ namespace CodeVote.Models
         public virtual string Email { get; set; }
         public virtual string UserName { get; set; }
         public virtual string PasswordHash { get; set; }
+
+        // User can have multiple votes
         public virtual List<IVote> Votes { get; set; } = null;
     }
 }

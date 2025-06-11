@@ -6,7 +6,7 @@
 
 ## 🔧 Tech Stack
 
-- **Framework:** ASP.NET Core (.NET 9)
+- **Framework:** ASP.NET Core (.NET 8)
 - **Authentication:** JWT (JSON Web Token)
 - **ORM:** Entity Framework Core
 - **Database:** SQL Server
@@ -36,13 +36,13 @@
 	- git clone https://github.com/zeleron7/CodeVote
 	
 2. **Set up the database**
-	- Ensure you have SQL Server installed and running.
-	- Update the connection string in `appsettings.json` (User Secrets works aswell).
+	- Ensure you have SQL Server installed and running
+	- Update the connection string in `appsettings.json` (User Secrets works aswell)
 	- run "dotnet ef database update" to apply migrations 
 
 3. **Run the application**
-	- Register a new user via the `/CodeVote/User/Register` endpoint.
-	- Login using `/CodeVote/Auth/Login` to receive a JWT token.
-	- Authorize in the top right corner of Swagger UI with the token.
+	- Register a new user via the `/CodeVote/User/Register` endpoint
+	- Login using `/CodeVote/Auth/Login` to receive a JWT token
+	- Authorize in the top right corner of Swagger UI with the token
 
 

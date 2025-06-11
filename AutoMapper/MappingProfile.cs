@@ -65,7 +65,6 @@ namespace CodeVote.AutoMapper
 
             CreateMap<VoteDbM, ReadVoteDTO>();
             #endregion
-
         }
     }
 }
