@@ -3,16 +3,19 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using CodeVote.Data;
-using CodeVote.Services;
 using Serilog;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using CodeVote.Models;
-using CodeVote.DbModels;
 using Microsoft.AspNetCore.Identity;
+using CodeVote.Data;
+using CodeVote.src.DbModels;
+using CodeVote.src.Services;
+using CodeVote.src.Services.Interfaces;
+using CodeVote.src.Utils;
+using static CodeVote.src.Utils.RemoveStringDefaultsSchemaFilter;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CodeVoteContext>(options =>
@@ -47,32 +50,34 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(c =>
+// JWT Authentication 
+builder.Services.AddSwaggerGen(options =>
 {
-    c.SwaggerDoc("v1", new() { Title = "CodeVote", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    // RemoveStringDefaultsSchemaFilter to remove default values for string properties
+    options.SchemaFilter<ClearStringExamplesSchemaFilter>();
 
-    var securityScheme = new OpenApiSecurityScheme
+    // Add JWT authentication to Swagger
+    #region JWT Auth
+    options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
     {
-        Name = "Authorization",
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
-        BearerFormat = "Jwt",
-        In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme.",
-        Reference = new OpenApiReference
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+      {
         {
-            Type = ReferenceType.SecurityScheme,
-            Id = "Bearer"
+          new OpenApiSecurityScheme
+          {
+            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" }
+          },
+          new string[] {}
         }
-    };
-
-    c.AddSecurityDefinition("Bearer", securityScheme);
-
-    // Use the AuthorizeCheckOperationFilter to only apply "padlock" symbol to endpoints with [Authorize] attribute
-    c.OperationFilter<AuthorizeCheckOperationFilter>();
-
-    // Use the RemoveStringDefaultsSchemaFilter to remove default values for string properties
-    c.SchemaFilter<ClearStringExamplesSchemaFilter>();
+      });
+    #endregion 
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
