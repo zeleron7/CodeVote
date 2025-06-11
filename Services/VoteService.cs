@@ -32,7 +32,17 @@ namespace CodeVote.Services
                     _logger.LogWarning("User with ID {UserId} does not exist.", voteDto.UserId);
                     return null;
                 }
-                    
+
+                // Check if user has already voted for the project idea to prevent duplicate votes
+                var voteExists = await _context.Votes
+                    .AnyAsync(v => v.UserId == voteDto.UserId && v.ProjectIdeaId == voteDto.ProjectIdeaId);
+
+                if (voteExists)
+                {
+                    _logger.LogWarning("Vote already exists for UserId {UserId} and ProjectIdeaId {ProjectIdeaId}", voteDto.UserId, voteDto.ProjectIdeaId);
+                    return null;
+                }
+
                 var project = await _context.ProjectIdeas
                 .FirstOrDefaultAsync(p => p.ProjectIdeaId == voteDto.ProjectIdeaId);
                 if (project == null)
