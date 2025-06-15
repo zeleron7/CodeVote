@@ -42,7 +42,12 @@
 
 3. **Run the application**
 	- Register a new user via the `/CodeVote/User/Register` endpoint
-	- Login using `/CodeVote/Auth/Login` to receive a JWT token
+	- Login via the `/CodeVote/Auth/Login` endpoint to receive a JWT
 	- Authorize in the top right corner of Swagger UI with the token
 
+--- 
 
+## Added Features
+
+**Seed Data**
+	- Added two endpoints to seed/clear project ideas
