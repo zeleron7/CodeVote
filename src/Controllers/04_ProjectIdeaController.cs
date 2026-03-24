@@ -28,15 +28,24 @@ namespace CodeVote.src.Controllers
         [HttpPost("Create")]
         public async Task<ActionResult<ReadProjectIdeaDTO>> CreateProjectIdea(CreateProjectIdeaDTO createProjectIdea)
         {
-            _logger.LogInformation("Creating a new project idea");
+            try
+            {
+                _logger.LogInformation("Creating a new project idea");
 
-            var userId = RetrieveUserId.GetUserId(User);
+                // Retrieve the user ID from claims and pass it to the service layer for authorization check
+                var userId = RetrieveUserId.GetUserId(User);
 
-            var createdProjectIdea = await _projectIdeaService.CreateProjectIdeaAsync(createProjectIdea, userId);
-            if (createdProjectIdea == null)
-                return BadRequest("Could not create project idea");
+                var createdProjectIdea = await _projectIdeaService.CreateProjectIdeaAsync(createProjectIdea, userId);
+                if (createdProjectIdea == null)
+                    return BadRequest("Could not create project idea");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while creating project idea");
+                return StatusCode(500, "Internal server error");
+            }
 
-            return createdProjectIdea;
+            return Ok("Project idea created successfully");
         }
         #endregion
 
@@ -45,13 +54,21 @@ namespace CodeVote.src.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<List<ReadProjectIdeaDTO>>> GetProjectIdeas()
         {
-            _logger.LogInformation("Fetching all project ideas");
+            try
+            {
+                _logger.LogInformation("Fetching all project ideas");
 
-            var projectIdeas = await _projectIdeaService.GetAllProjectIdeasAsync();
-            if (projectIdeas == null)
-                return NotFound();
+                var projectIdeas = await _projectIdeaService.GetAllProjectIdeasAsync();
+                if (projectIdeas == null)
+                    return NotFound();
 
-            return Ok(projectIdeas);
+                return Ok(projectIdeas);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching project ideas");
+                return StatusCode(500, "Internal server error");
+            }
         }
         #endregion
 
@@ -60,13 +77,21 @@ namespace CodeVote.src.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ReadProjectIdeaDTO>> GetOneProjectIdea(Guid id)
         {
-            _logger.LogInformation("Fetching project idea with ID: {id}", id);
+            try
+            {
+                _logger.LogInformation("Fetching project idea with ID: {id}", id);
 
-            var projectidea = await _projectIdeaService.GetProjectIdeaByIdAsync(id);
-            if (projectidea == null)
-                return NotFound();
+                var projectidea = await _projectIdeaService.GetProjectIdeaByIdAsync(id);
+                if (projectidea == null)
+                    return NotFound();
 
-            return Ok(projectidea);
+                return Ok(projectidea);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching project idea with ID: {id}", id);
+                return StatusCode(500, "Internal server error");
+            }
         }
         #endregion
 
@@ -76,13 +101,24 @@ namespace CodeVote.src.Controllers
         [HttpPatch("Update/{id}")]
         public async Task<ActionResult<ReadProjectIdeaDTO>> UpdateProjectIdea(Guid id, UpdateProjectIdeaDTO updateprojectideaDto)
         {
-            _logger.LogInformation("Updating project idea with ID: {id}", id);
+            try
+            {
+                _logger.LogInformation("Updating project idea with ID: {id}", id);
 
-            var updatedProjectidea = await _projectIdeaService.UpdateProjectIdeaAsync(id, updateprojectideaDto);
-            if (updatedProjectidea == null)
-                return NotFound();
+                // Retrieve the user ID from claims and pass it to the service layer for authorization check
+                var userId = RetrieveUserId.GetUserId(User);
 
-            return Ok(updatedProjectidea);
+                var updatedProjectidea = await _projectIdeaService.UpdateProjectIdeaAsync(id, updateprojectideaDto, userId);
+                if (updatedProjectidea == null)
+                    return NotFound();
+
+                return Ok(updatedProjectidea);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating project idea with ID: {id}", id);
+                return StatusCode(500, "Internal server error");
+            }
         }
         #endregion
 
@@ -92,14 +128,25 @@ namespace CodeVote.src.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteProjectIdea(Guid id)
         {
-            _logger.LogInformation("Deleting project idea with ID: {id}", id);
+            try
+            {
+                _logger.LogInformation("Deleting project idea with ID: {id}", id);
 
-            var success = await _projectIdeaService.DeleteProjectIdeaAsync(id);
-            if (!success)
-                return NotFound();
+                // Retrieve the user ID from claims and pass it to the service layer for authorization check
+                var userId = RetrieveUserId.GetUserId(User);
 
-            return Ok("Project idea deleted successfully");
+                var success = await _projectIdeaService.DeleteProjectIdeaAsync(id, userId);
+                if (!success)
+                    return NotFound();
+
+                return Ok("Project idea deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while deleting project idea with ID: {id}", id);
+                return StatusCode(500, "Internal server error");
+            }
+            #endregion
         }
-        #endregion
     }
 }

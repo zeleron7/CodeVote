@@ -34,13 +34,21 @@ namespace CodeVote.src.Controllers
         [HttpPost]
         public async Task<ActionResult<ReadVoteDTO>> CreateVote(CreateVoteDTO createVoteDto)
         {
-            _logger.LogInformation("Creating a new vote");
+            try
+            { 
+                _logger.LogInformation("Creating a new vote");
 
-            var createdVote = await _voteService.CreateVoteAsync(createVoteDto);
-            if (createdVote == null)
-                return BadRequest("Could not create vote");
+                var createdVote = await _voteService.CreateVoteAsync(createVoteDto);
+                if (createdVote == null)
+                    return BadRequest("Could not create vote");
 
-            return Ok(createdVote);
+                return Ok(createdVote);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while creating vote");
+                return StatusCode(500, "Internal server error");
+            }
         }
         #endregion
 
@@ -50,13 +58,21 @@ namespace CodeVote.src.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteVote(Guid id)
         {
-            _logger.LogInformation("Deleting vote with ID: {id}", id);
+            try
+            {
+                _logger.LogInformation("Deleting vote with ID: {id}", id);
 
-            var success = await _voteService.DeleteVoteAsync(id);
-            if (!success)
-                return NotFound();
+                var success = await _voteService.DeleteVoteAsync(id);
+                if (!success)
+                    return NotFound();
 
-            return Ok("Vote deleted successfully");
+                return Ok("Vote deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while deleting vote with ID: {id}", id);
+                return StatusCode(500, "Internal server error");
+            }
         }
         #endregion 
     }

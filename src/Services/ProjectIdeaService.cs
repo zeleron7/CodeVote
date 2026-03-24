@@ -111,7 +111,7 @@ namespace CodeVote.src.Services
 
         // Update a project idea
         #region UpdateProjectIdeaAsync
-        public async Task<ReadProjectIdeaDTO> UpdateProjectIdeaAsync(Guid projectIdeaId, UpdateProjectIdeaDTO updateProjectIdeaDto)
+        public async Task<ReadProjectIdeaDTO> UpdateProjectIdeaAsync(Guid projectIdeaId, UpdateProjectIdeaDTO updateProjectIdeaDto, Guid? userId)
         {
             try
             {
@@ -126,6 +126,12 @@ namespace CodeVote.src.Services
                 {
                     _logger.LogWarning("UpdateProjectIdeaAsync: No project idea found with ID {ProjectIdeaId}", projectIdeaId);
                     return null;
+                }
+                // Check if the user is authorized to update the project idea (i.e., they are the owner of the project idea)
+                if (projectIdeaEntity.UserId != userId)
+                {
+                    _logger.LogWarning("UpdateProjectIdeaAsync: User {UserId} is not authorized to update project idea with ID {ProjectIdeaId}", userId, projectIdeaId);
+                    return null; // Or throw an exception if you prefer
                 }
 
                 _mapper.Map(updateProjectIdeaDto, projectIdeaEntity);
@@ -144,7 +150,7 @@ namespace CodeVote.src.Services
 
         // Delete a project idea
         #region DeleteProjectIdeaAsync
-        public async Task<bool> DeleteProjectIdeaAsync(Guid projectIdeaId)
+        public async Task<bool> DeleteProjectIdeaAsync(Guid projectIdeaId, Guid? userId)
         {
             try
             {
@@ -153,12 +159,18 @@ namespace CodeVote.src.Services
                     _logger.LogWarning("DeleteProjectIdeaAsync: projectIdeaId is empty");
                     return false;
                 }
-
                 var projectIdeaEntity = await _context.ProjectIdeas.FindAsync(projectIdeaId);
+
+                // Check if the user is authorized to delete the project idea (i.e., they are the owner of the project idea)
                 if (projectIdeaEntity == null)
                 {
                     _logger.LogWarning("DeleteProjectIdeaAsync: Project idea with ID {ProjectIdeaId} was not found", projectIdeaId);
                     return false;
+                }
+                if (projectIdeaEntity.UserId != userId)
+                {
+                    _logger.LogWarning("DeleteProjectIdeaAsync: User {UserId} is not authorized to delete project idea with ID {ProjectIdeaId}", userId, projectIdeaId);
+                    return false; // Or throw an exception if you prefer
                 }
 
                 _context.ProjectIdeas.Remove(projectIdeaEntity);
