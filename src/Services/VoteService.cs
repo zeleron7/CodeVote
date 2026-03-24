@@ -50,7 +50,7 @@ namespace CodeVote.src.Services
                     _logger.LogWarning("Project idea with ID {ProjectIdeaId} does not exist.", voteDto.ProjectIdeaId);
                     return null;
                 }
-
+                
                 // Create and save vote
                 var vote = new VoteDbM
                 {

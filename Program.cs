@@ -31,6 +31,7 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // JWT Authentication
+#region JWT Auth
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -46,18 +47,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
+#endregion JWT Auth
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// JWT Authentication 
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
     // RemoveStringDefaultsSchemaFilter to remove default values for string properties
     options.SchemaFilter<ClearStringExamplesSchemaFilter>();
 
-    // Add JWT authentication to Swagger
+    // JWT Authentication in Swagger
     #region JWT Auth
     options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
     {

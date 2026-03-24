@@ -12,24 +12,40 @@ namespace CodeVote.src.Services
 
         public SeedDatabaseService(ILogger<SeedDatabaseService> logger)
         {
-            _logger = logger;
+            _logger = logger;   
         }
 
         // SeedDatabaseAsync
         #region SeedDatabaseAsync
-        public async Task SeedDatabaseAsync(CodeVoteContext context)
+        public async Task SeedDatabaseAsync(CodeVoteContext context, Guid? userId)
         {
-            string jsonData = await File.ReadAllTextAsync(seedSource);
-            if (string.IsNullOrWhiteSpace(jsonData))
+            try
             {
-                _logger.LogError("Seed data file is empty or not found at {SeedSource}", seedSource);
-                throw new InvalidOperationException();
+                string jsonData = await File.ReadAllTextAsync(seedSource);
+                if (string.IsNullOrWhiteSpace(jsonData))
+                {
+                    _logger.LogError("Seed data file is empty or not found at {SeedSource}", seedSource);
+                    throw new InvalidOperationException();
+                }
+
+                var projectIdeas = System.Text.Json.JsonSerializer.Deserialize<List<ProjectIdeaDbM>>(jsonData);
+
+                // Assign new project ID and user ID to each project idea before saving to the database
+                projectIdeas = projectIdeas.Select(pi =>
+                {
+                    pi.ProjectIdeaId = Guid.NewGuid();
+                    pi.UserId = (Guid)userId;
+                    return pi;
+                }).ToList();
+
+                await context.AddRangeAsync(projectIdeas);
+                await context.SaveChangesAsync();
             }
-
-            var projectIdeas = System.Text.Json.JsonSerializer.Deserialize<List<ProjectIdeaDbM>>(jsonData);
-
-            await context.AddRangeAsync(projectIdeas);
-            await context.SaveChangesAsync();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error seeding database from file {SeedSource}", seedSource);
+                throw;
+            }
         }
         #endregion 
 
@@ -37,16 +53,27 @@ namespace CodeVote.src.Services
         #region ClearDatabaseAsync
         public async Task ClearDatabaseAsync(CodeVoteContext context)
         {
-            var projectIdeas = context.ProjectIdeas;
-
-            if (projectIdeas == null || !projectIdeas.Any())
+            try
             {
-                _logger.LogInformation("No project ideas found to clear.");
-                return;
-            }
+                // Remove votes first to avoid foreign key constraint issues when removing project ideas
+                if (context.Votes.Any())
+                {
+                    context.Votes.RemoveRange(context.Votes);
+                    await context.SaveChangesAsync();
+                }
 
-            context.RemoveRange(projectIdeas);
-            context.SaveChanges();
+                if (context.ProjectIdeas.Any())
+                {
+                    context.ProjectIdeas.RemoveRange(context.ProjectIdeas);
+                    context.SaveChanges();
+                }
+                _logger.LogInformation("No project ideas found to clear.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error clearing database");
+                throw;
+            }
         }
         #endregion 
     }

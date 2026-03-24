@@ -9,6 +9,7 @@ namespace CodeVote.src.DbModels
         // PK
         [Key]
         public Guid ProjectIdeaId { get; set; }
+        // FK
         public Guid UserId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

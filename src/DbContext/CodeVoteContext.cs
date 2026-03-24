@@ -33,8 +33,6 @@ namespace CodeVote.Data
                 .WithMany(u => u.Votes)
                 .HasForeignKey(v => v.UserId)
                 .OnDelete(DeleteBehavior.Restrict); 
-
         }
-    }
-    
+    }  
 }

@@ -145,8 +145,8 @@ namespace CodeVote.src.Controllers
             {
                 _logger.LogError(ex, "Error occurred while deleting project idea with ID: {id}", id);
                 return StatusCode(500, "Internal server error");
-            }
-            #endregion
+            }     
         }
+        #endregion 
     }
 }

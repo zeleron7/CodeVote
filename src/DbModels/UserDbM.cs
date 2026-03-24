@@ -14,6 +14,7 @@ namespace CodeVote.src.DbModels
         public string Email { get; set; }
         public string UserName { get; set; }
         public string PasswordHash { get; set; }
+
         // User can have multiple project ideas
         public List<ProjectIdeaDbM> ProjectIdeas { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using CodeVote.Data;
 using CodeVote.src.Services.Interfaces;
+using CodeVote.src.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,10 @@ namespace CodeVote.src.Controllers
         {
             try
             {
-                await _seedDatabaseService.SeedDatabaseAsync(context);
+                // Retrieve the user ID from claims and pass it to the service layer for authorization check
+                var userId = RetrieveUserId.GetUserId(User);
+
+                await _seedDatabaseService.SeedDatabaseAsync(context, userId);
                 _logger.LogInformation("Database seeded successfully");
                 return Ok("Database seeded successfully.");
             }
@@ -46,6 +50,9 @@ namespace CodeVote.src.Controllers
         {
             try
             {
+                // Retrieve the user ID from claims and pass it to the service layer for authorization check
+                var userId = RetrieveUserId.GetUserId(User);
+
                 await _seedDatabaseService.ClearDatabaseAsync(context);
                 _logger.LogInformation("Database cleared successfully");
                 return Ok("Database cleared successfully.");

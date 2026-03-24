@@ -88,11 +88,11 @@ namespace CodeVote.src.Services
 
         // Get a user by ID
         #region GetUserByIdAsync
-        public async Task<ReadUserDTO> GetUserByIdAsync(Guid userId)
+        public async Task<ReadUserDTO> GetUserByIdAsync(Guid user, Guid? userId)
         {
             try
             {
-                if (userId == Guid.Empty)
+                if (user == Guid.Empty)
                 {
                     _logger.LogWarning("GetUserByIdAsync: userId is empty");
                     return null;
@@ -100,12 +100,18 @@ namespace CodeVote.src.Services
 
                 var userEntity = await _context.Users
                 .Include(u => u.Votes)
-                .FirstOrDefaultAsync(u => u.UserId == userId);
+                .FirstOrDefaultAsync(u => u.UserId == user);
 
                 if (userEntity == null)
                 {
-                    _logger.LogWarning("GetUserByIdAsync: No user found with ID: {UserId}", userId);
+                    _logger.LogWarning("GetUserByIdAsync: No user found with ID: {UserId}", user);
                     return null;
+                }
+                // Check if the user is authorized to update the project idea (i.e., they are the owner of the project idea)
+                if (userEntity.UserId != userId)
+                {
+                    _logger.LogWarning("GetUserByIdAsync: User {UserId} is not authorized to retrieve user information with ID {user}", userId, user);
+                    return null; // Or throw an exception if you prefer
                 }
 
                 _logger.LogInformation("User retrieved successfully with ID: {UserId}", userEntity.UserId);
@@ -138,7 +144,7 @@ namespace CodeVote.src.Services
                     _logger.LogWarning("UpdateUserAsync: userEntity is null for UserId {UserId}", userId);
                     return null;
                 }
-
+                
                 _mapper.Map(updateUserDto, userEntity);
                 await _context.SaveChangesAsync();
 
@@ -156,21 +162,27 @@ namespace CodeVote.src.Services
 
         // Delete a user
         #region DeleteUserAsync
-        public async Task<bool> DeleteUserAsync(Guid userId)
+        public async Task<bool> DeleteUserAsync(Guid user, Guid? userId)
         {
             try
             {
-                if (userId == Guid.Empty)
+                if (user == Guid.Empty)
                 {
                     _logger.LogWarning("DeleteUserAsync: userId is empty");
                     return false;
                 }
 
-                var userEntity = await _context.Users.FindAsync(userId);
+                var userEntity = await _context.Users.FindAsync(user);
                 if (userEntity == null)
                 {
-                    _logger.LogWarning("DeleteUserAsync: userEntity is null for UserId {UserId}", userId);
+                    _logger.LogWarning("DeleteUserAsync: userEntity is null for UserId {UserId}", user);
                     return false;
+                }
+                // Check if the user is authorized to delete the user (i.e., they are the user)
+                if (userEntity.UserId != userId)
+                {
+                    _logger.LogWarning("DeleteUserAsync: User {UserId} is not authorized to delete user with ID {User}", userId, user);
+                    return false; // Or throw an exception if you prefer
                 }
 
                 _context.Users.Remove(userEntity);

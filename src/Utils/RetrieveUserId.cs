@@ -11,7 +11,6 @@ namespace CodeVote.src.Utils
             if (Guid.TryParse(userIdClaim, out var guid)) 
                 return guid;
             return null;
-
         }
     }
 }

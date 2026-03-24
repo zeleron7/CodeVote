@@ -51,8 +51,3 @@
 
 **Seed Data**
 	- Added two endpoints to seed/clear project ideas
-
-## TODO
-
-**Auth checks**
-    - Auth checks in UserService so users can only update their own data etc

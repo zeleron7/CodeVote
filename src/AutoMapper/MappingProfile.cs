@@ -8,7 +8,7 @@ namespace CodeVote.src.AutoMapper
     {
         public MappingProfile()
         {
-            //project idea
+            // project idea
             #region ProjectIdea
             CreateMap<CreateProjectIdeaDTO, ProjectIdeaDbM>();
 
@@ -26,7 +26,7 @@ namespace CodeVote.src.AutoMapper
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion
 
-            //user
+            // user
             #region User
             CreateMap<CreateUserDTO, UserDbM>()
                 // Map FirstName and LastName to null if empty/whitespace instead of empty string
@@ -59,7 +59,7 @@ namespace CodeVote.src.AutoMapper
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion
 
-            //vote
+            // vote
             #region Vote
             CreateMap<CreateVoteDTO, VoteDbM>();
 
