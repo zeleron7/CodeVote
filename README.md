@@ -26,7 +26,7 @@
 
 ## 📜 Swagger documentation for API endpoints
 
-![CodeVote Architecture](Images/swaggerEndpoints.png)
+![CodeVote Architecture](Images/swaggerDoc.png)
 
 ---
 
@@ -41,7 +41,7 @@
 	- run "dotnet ef database update" to apply migrations 
 
 3. **Run the application**
-	- Register a new user via the `/CodeVote/User/Register` endpoint
+	- Register a new user via the `/CodeVote/Auth/Register` endpoint
 	- Login via the `/CodeVote/Auth/Login` endpoint to receive a JWT
 	- Authorize in the top right corner of Swagger UI with the token
 
@@ -51,3 +51,10 @@
 
 **Seed Data**
 	- Added two endpoints to seed/clear project ideas
+
+--- 
+
+## Important
+
+**Authentication**
+	- Use proper authentication and role based authorization in production

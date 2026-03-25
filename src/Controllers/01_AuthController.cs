@@ -68,7 +68,7 @@ namespace CodeVote.src.Controllers
         }
         #endregion
 
-        // POST: CodeVote/User/Register
+        // POST: CodeVote/Auth/Register
         #region Register
         [HttpPost("Register")]
         public async Task<ActionResult<ReadUserDTO>> CreateUser(CreateUserDTO createUserDto)
