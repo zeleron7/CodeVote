@@ -4,7 +4,7 @@ namespace CodeVote.src.Services.Interfaces
 {
     public interface ISeedDatabaseService
     {
-        public Task SeedDatabaseAsync(CodeVoteContext context, Guid? userId);
-        public Task ClearDatabaseAsync(CodeVoteContext context);
+        Task SeedDatabaseAsync(CodeVoteContext context, Guid? userId);
+        Task ClearDatabaseAsync(CodeVoteContext context);
     }
 }

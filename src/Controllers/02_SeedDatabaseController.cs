@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CodeVote.src.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("CodeVote/[controller]")]
     [ApiController]
     public class SeedDatabaseController : ControllerBase
     {
