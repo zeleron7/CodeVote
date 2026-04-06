@@ -1,6 +1,6 @@
 # 🗳️ CodeVote
 
-**CodeVote API** is a RESTful web API built with ASP.NET Core that enables users to register, authenticate using JWT, and submit/vote for project ideas.
+**CodeVote API** is a RESTful web API built with ASP.NET Core that enables users to register, authenticate using JWT, and submit/vote for project ideas. 
 
 ---
 
@@ -11,16 +11,6 @@
 - **ORM:** Entity Framework Core
 - **Database:** SQL Server
 - **Logging:** Serilog
-
----
-
-## 🚀 Features
-
-- ✅ User registration with hashed passwords
-- 🔐 JWT-based login & authentication
-- 📮 CRUD for users and project ideas
-- 🧪 Fully async operations with EF Core
-- 📦 DTO pattern with AutoMapper 
 
 ---
 
@@ -47,14 +37,11 @@
 
 --- 
 
-## Added Features
+## Notes
 
-**Seed Data**
-	- Added two endpoints to seed/clear project ideas
+This project was created as a refresher for core concepts and is not intended for production use.
 
---- 
+- Authentication and role-based authorization are not fully implemented.
+- Never try to implement your own Authentication.
+- No more changes will be made to this project, as it serves its purpose as a learning exercise.
 
-## Important
-
-**Authentication**
-	- Use proper authentication and role based authorization in production

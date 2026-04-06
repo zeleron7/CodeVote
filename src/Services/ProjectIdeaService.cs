@@ -161,12 +161,12 @@ namespace CodeVote.src.Services
                 }
                 var projectIdeaEntity = await _context.ProjectIdeas.FindAsync(projectIdeaId);
 
-                // Check if the user is authorized to delete the project idea (i.e., they are the owner of the project idea)
                 if (projectIdeaEntity == null)
                 {
                     _logger.LogWarning("DeleteProjectIdeaAsync: Project idea with ID {ProjectIdeaId} was not found", projectIdeaId);
                     return false;
                 }
+                // Check if the user is authorized to delete the project idea (i.e., they are the owner of the project idea)
                 if (projectIdeaEntity.UserId != userId)
                 {
                     _logger.LogWarning("DeleteProjectIdeaAsync: User {UserId} is not authorized to delete project idea with ID {ProjectIdeaId}", userId, projectIdeaId);
