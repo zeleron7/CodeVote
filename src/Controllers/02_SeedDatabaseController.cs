@@ -50,9 +50,6 @@ namespace CodeVote.src.Controllers
         {
             try
             {
-                // Retrieve the user ID from claims and pass it to the service layer for authorization check
-                var userId = RetrieveUserId.GetUserId(User);
-
                 await _seedDatabaseService.ClearDatabaseAsync(context);
                 _logger.LogInformation("Database cleared successfully");
                 return Ok("Database cleared successfully.");

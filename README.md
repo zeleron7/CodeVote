@@ -1,10 +1,10 @@
-# 🗳️ CodeVote
+# CodeVote
 
 **CodeVote API** is a RESTful web API built with ASP.NET Core that enables users to register, authenticate using JWT, and submit/vote for project ideas. 
 
 ---
 
-## 🔧 Tech Stack
+## Tech Stack
 
 - **Framework:** ASP.NET Core (.NET 8)
 - **Authentication:** JWT (JSON Web Token)
@@ -14,13 +14,13 @@
 
 ---
 
-## 📜 Swagger documentation for API endpoints
+## Swagger documentation for API endpoints
 
 ![CodeVote Architecture](Images/swaggerDoc.png)
 
 ---
 
-## 🛠️ Getting Started
+## Getting Started
 
 1. **Clone the repository**
 	- git clone https://github.com/zeleron7/CodeVote
